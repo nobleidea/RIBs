@@ -18,7 +18,7 @@ protocol LoggedInViewControllable: ViewControllable {
     // this RIB does not own its own view, this protocol is conformed to by one of this
     // RIB's ancestor RIBs' view.
     func present(viewController: ViewControllable)
-    func dismiss(viewControlelr: ViewControllable)
+    func dismiss(viewController: ViewControllable)
 }
 
 final class LoggedInRouter: Router<LoggedInInteractable>, LoggedInRouting {
@@ -38,7 +38,7 @@ final class LoggedInRouter: Router<LoggedInInteractable>, LoggedInRouting {
         // TODO: Since this router does not own its view, it needs to cleanup the views
         // it may have added to the view hierarchy, when its interactor is deactivated.
         if let currentChild = currentChild {
-            viewController.dismiss(viewControlelr: currentChild.viewControllable)
+            viewController.dismiss(viewController: currentChild.viewControllable)
         }
     }
     
@@ -66,7 +66,7 @@ final class LoggedInRouter: Router<LoggedInInteractable>, LoggedInRouting {
     func routeToTicTacToe() {
         if let offGame = self.offGame {
             detachChild(offGame)
-            viewController.dismiss(viewControlelr: offGame.viewControllable)
+            viewController.dismiss(viewController: offGame.viewControllable)
             self.offGame = nil
         }
         
@@ -74,5 +74,15 @@ final class LoggedInRouter: Router<LoggedInInteractable>, LoggedInRouting {
         attachChild(ticTacToe)
     }
     
+    func routeToOffGame() {
+        detachCurrentChild()
+        attachOffGame()
+    }
     
+    private func detachCurrentChild() {
+        if let currentChild = currentChild {
+            detachChild(currentChild)
+            viewController.dismiss(viewController: currentChild.viewControllable)
+        }
+    }
 }

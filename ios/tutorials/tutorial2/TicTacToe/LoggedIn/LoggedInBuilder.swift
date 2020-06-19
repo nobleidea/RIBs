@@ -20,7 +20,7 @@ protocol LoggedInDependency: Dependency {
     var loggedInViewController: LoggedInViewControllable { get }
 }
 
-final class LoggedInComponent: Component<LoggedInDependency>, OffGameDependency {
+final class LoggedInComponent: Component<LoggedInDependency>, OffGameDependency, TicTacToeDependency {
 
     fileprivate var loggedInViewController: LoggedInViewControllable {
         return dependency.loggedInViewController
@@ -46,8 +46,10 @@ final class LoggedInBuilder: Builder<LoggedInDependency>, LoggedInBuildable {
         
         let offGameBuilder = OffGameBuilder(dependency: component)
         
+        let ticTacToeBuilder = TicTacToeBuilder(dependency: component)
+        
         return LoggedInRouter(interactor: interactor,
                               viewController: component.loggedInViewController,
-        offGameBuilder: offGameBuilder)
+                              offGameBuilder: offGameBuilder, ticTacToeBuilder: ticTacToeBuilder)
     }
 }
