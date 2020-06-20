@@ -17,6 +17,7 @@
 import RIBs
 import SnapKit
 import UIKit
+import RxSwift
 
 protocol OffGamePresentableListener: class {
     // TODO: Declare properties and methods that the view controller can invoke to perform
@@ -31,7 +32,8 @@ final class OffGameViewController: UIViewController, OffGamePresentable, OffGame
     }
 
     weak var listener: OffGamePresentableListener?
-
+    private let disposeBag = DisposeBag()
+    
     init() {
         super.init(nibName: nil, bundle: nil)
     }
@@ -60,7 +62,12 @@ final class OffGameViewController: UIViewController, OffGamePresentable, OffGame
         startButton.setTitle("Start Game", for: .normal)
         startButton.setTitleColor(UIColor.white, for: .normal)
         startButton.backgroundColor = UIColor.black
-        
-        listener?.startTicTacToe()
+     
+        startButton.rx.tap
+                .subscribe(onNext: { [weak self] in
+                    self?.listener?.startTicTacToe()
+                })
+                .disposed(by: disposeBag)
+
     }
 }

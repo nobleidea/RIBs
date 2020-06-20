@@ -42,7 +42,7 @@ final class LoggedInInteractor: Interactor, LoggedInInteractable {
     }
     
     func startTicTacToe() {
-        return
+        router?.routeToTicTacToe()
     }
     
     func gameDidEnd() {
