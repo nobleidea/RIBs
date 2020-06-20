@@ -24,40 +24,40 @@ protocol TicTacToeRouting: ViewableRouting {
 protocol TicTacToePresentable: Presentable {
     var listener: TicTacToePresentableListener? { get set }
     func setCell(atRow row: Int, col: Int, withPlayerType playerType: PlayerType)
-    func announce(winner: PlayerType)
+    func announce(winner: PlayerType?, withCompletionHandler handler: @escaping () -> ())
 }
 
 protocol TicTacToeListener: class {
-    func gameDidEnd()
+    func gameDidEnd(withWinner winner: PlayerType?)
 }
 
 final class TicTacToeInteractor: PresentableInteractor<TicTacToePresentable>, TicTacToeInteractable, TicTacToePresentableListener {
-
+    
     weak var router: TicTacToeRouting?
-
+    
     weak var listener: TicTacToeListener?
-
+    
     // TODO: Add additional dependencies to constructor. Do not perform any logic
     // in constructor.
     override init(presenter: TicTacToePresentable) {
         super.init(presenter: presenter)
         presenter.listener = self
     }
-
+    
     override func didBecomeActive() {
         super.didBecomeActive()
-
+        
         initBoard()
     }
-
+    
     override func willResignActive() {
         super.willResignActive()
         // TODO: Pause any business logic.
     }
-
+    
     // MARK: - TicTacToePresentableListener
-
-    func placeCurrentPlayerMark(atRow row: Int, col: Int) {
+    
+   func placeCurrentPlayerMark(atRow row: Int, col: Int) {
         guard board[row][col] == nil else {
             return
         }
@@ -67,31 +67,29 @@ final class TicTacToeInteractor: PresentableInteractor<TicTacToePresentable>, Ti
         presenter.setCell(atRow: row, col: col, withPlayerType: currentPlayer)
 
         if let winner = checkWinner() {
-            presenter.announce(winner: winner)
+            presenter.announce(winner: winner) {
+                self.listener?.gameDidEnd(withWinner: winner)
+            }
         }
     }
-
-    func closeGame() {
-        listener?.gameDidEnd()
-    }
-
+    
     // MARK: - Private
-
+    
     private var currentPlayer = PlayerType.player1
     private var board = [[PlayerType?]]()
-
+    
     private func initBoard() {
         for _ in 0..<GameConstants.rowCount {
             board.append([nil, nil, nil])
         }
     }
-
+    
     private func getAndFlipCurrentPlayer() -> PlayerType {
         let currentPlayer = self.currentPlayer
         self.currentPlayer = currentPlayer == .player1 ? .player2 : .player1
         return currentPlayer
     }
-
+    
     private func checkWinner() -> PlayerType? {
         // Rows.
         for row in 0..<GameConstants.rowCount {
@@ -109,7 +107,7 @@ final class TicTacToeInteractor: PresentableInteractor<TicTacToePresentable>, Ti
                 return winner
             }
         }
-
+        
         // Cols.
         for col in 0..<GameConstants.colCount {
             guard let assumedWinner = board[0][col] else {
@@ -126,7 +124,7 @@ final class TicTacToeInteractor: PresentableInteractor<TicTacToePresentable>, Ti
                 return winner
             }
         }
-
+        
         // Diagnals.
         guard let p11 = board[1][1] else {
             return nil
@@ -136,13 +134,13 @@ final class TicTacToeInteractor: PresentableInteractor<TicTacToePresentable>, Ti
                 return p11
             }
         }
-
+        
         if let p02 = board[0][2], let p20 = board[2][0] {
             if p02.rawValue == p11.rawValue && p11.rawValue == p20.rawValue {
                 return p11
             }
         }
-
+        
         return nil
     }
 }
