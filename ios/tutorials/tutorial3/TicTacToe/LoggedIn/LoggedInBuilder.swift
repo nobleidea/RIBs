@@ -34,6 +34,10 @@ final class LoggedInComponent: Component<LoggedInDependency> {
         self.player2Name = player2Name
         super.init(dependency: dependency)
     }
+    
+    var mutableScoreStream: MutableScoreStream {
+        return shared { ScoreStreamImpl() }
+    }
 }
 
 // MARK: - Builder
@@ -65,5 +69,11 @@ final class LoggedInBuilder: Builder<LoggedInDependency>, LoggedInBuildable {
                               viewController: component.loggedInViewController,
                               offGameBuilder: offGameBuilder,
                               ticTacToeBuilder: ticTacToeBuilder)
+    }
+}
+
+extension LoggedInComponent: OffGameDependency {
+    var scoreStream: ScoreStream {
+        return mutableScoreStream
     }
 }
