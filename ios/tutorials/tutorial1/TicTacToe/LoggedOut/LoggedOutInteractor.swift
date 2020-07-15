@@ -23,20 +23,34 @@ protocol LoggedOutListener: class {
 }
 
 final class LoggedOutInteractor: PresentableInteractor<LoggedOutPresentable>, LoggedOutInteractable, LoggedOutPresentableListener {
-    func login(withPlayerName player1Name: String?, player2Name: String?) {
-        let player1NameWithDefault = playerName(player1Name, withDefaultName: "Player 1")
-        let player2NameWithDefault = playerName(player2Name, withDefaultName: "Player 2")
-        
-        print("\(player1NameWithDefault) vd \(player2NameWithDefault)")
-    }
-    
-    private func playerName(_ name: String?, withDefaultName defaultName: String) -> String {
-        if let name = name {
-            return name.isEmpty ? defaultName : name
-        } else {
-            return defaultName
-        }
-    }
+
+	func login(withPlayerName player1Name: String?, player2Name: String?) {
+		let player1NameWithDefault = playerName(player1Name, withDefaultName: "Player 1")
+		let player2NameWithDefault = playerName(player2Name, withDefaultName: "Player 2")
+	}
+
+
+	private func playerName(_ name: String?, withDefaultName defaultName: String) -> String {
+		if let name = name {
+			return name.isEmpty ? defaultName : name
+		} else {
+			return defaultName
+		}
+	}
+//    func login(withPlayerName player1Name: String?, player2Name: String?) {
+//        let player1NameWithDefault = playerName(player1Name, withDefaultName: "Player 1")
+//        let player2NameWithDefault = playerName(player2Name, withDefaultName: "Player 2")
+//
+//        print("\(player1NameWithDefault) vd \(player2NameWithDefault)")
+//    }
+//
+//    private func playerName(_ name: String?, withDefaultName defaultName: String) -> String {
+//        if let name = name {
+//            return name.isEmpty ? defaultName : name
+//        } else {
+//            return defaultName
+//        }
+//    }
     
 
     weak var router: LoggedOutRouting?

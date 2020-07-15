@@ -16,7 +16,9 @@ protocol LoggedOutPresentableListener: class {
     // business logic, such as signIn(). This protocol is implemented by the corresponding
     // interactor class.
     
-    func login(withPlayerName player1Name: String?, player2Name: String?)
+//    func login(withPlayerName player1Name: String?, player2Name: String?)
+
+	func login(withPlayerName player1Name: String?, player2Name: String?)
 }
 
 final class LoggedOutViewController: UIViewController, LoggedOutPresentable, LoggedOutViewControllable {
