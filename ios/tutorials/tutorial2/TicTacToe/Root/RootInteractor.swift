@@ -19,7 +19,8 @@ import RxSwift
 
 protocol RootRouting: ViewableRouting {
     // TODO: Declare methods the interactor can invoke to manage sub-tree via the router.
-    func routeToLoggedIn(withPlayer1Name player1Name: String, withPlayer2Name: String)
+//    func routeToLoggedIn(withPlayer1Name player1Name: String, withPlayer2Name: String)
+	func routeToLoggedIn(withPlayer1Name player1Name: String, withPlayer2Name: String)
 }
 
 protocol RootPresentable: Presentable {
